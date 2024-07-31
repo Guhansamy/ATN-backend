@@ -2,6 +2,7 @@ const { User } = require("../Models/models.js");
 const mongoose = require("mongoose");
 
 const userController = async (req, res) => {
+    console.log("new user creating");
     try {
         const userData = {
             password: req.body.password,
@@ -9,6 +10,9 @@ const userController = async (req, res) => {
         };
 
         if (userData.password == userData.confirmpassword) {
+            {
+                console.log("pass checking");
+            }
             const a = await User.create({
                 fname: req.body.fname,
                 lname: req.body.lname,
@@ -16,6 +20,9 @@ const userController = async (req, res) => {
                 mobile: req.body.mobile,
                 password: req.body.password,
             });
+            {
+                console.log("pass ok");
+            }
             console.log(a);
             res.status(200).json({
                 status: "successfully created",
@@ -45,9 +52,12 @@ const loginpage = async (req, res) => {
         const filter = { email: req.body.email, password: req.body.password };
         const email = filter.email;
         const verify = await User.findOne({ email: email });
+        console.log(verify, "-----");
         if (verify != [] && verify.password == filter.password) {
             res.status(200).json({
                 status: "correct and login successfully",
+                name: verify.fname + verify.lname,
+                id: verify._id,
                 data: true,
             });
         } else {
